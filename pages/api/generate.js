@@ -48,6 +48,7 @@ export default async function (req, res) {
       model: "text-davinci-003",
       prompt: generatePrompt(dreamAnalysisDescription,dreamFeeling,walkingInfluence),
       temperature: 0.6,
+      max_tokens:3500
     });
     res.status(200).json({ result: completion.data.choices[0].text });
     console.log(res)
@@ -72,6 +73,6 @@ function generatePrompt(dreamAnalysisDescription,dreamFeeling,walkingInfluence) 
 const dreamAnalysisprefix = "ChatGPT, analyze this dream for me with Freudian psychoanalysis and omit the first paragraph and any disclaimers that you are not a psychologist, I know you're just an ai chatbot:";
 const dreamFeelingPrefix = "My feelings of the dream:";
 const dreamWakingInfluencePrefix= "What may be influencing influencing this dream in my waking life:"
-const DreamAnalysisString= dreamAnalysisprefix + dreamAnalysisDescription + dreamFeelingPrefix + dreamFeeling + dreamWakingInfluencePrefix+ walkingInfluence
+const DreamAnalysisString= dreamAnalysisprefix + dreamAnalysisDescription +dreamFeelingPrefix+dreamFeeling +dreamWakingInfluencePrefix +walkingInfluence 
   return DreamAnalysisString;
 }
