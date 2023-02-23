@@ -3,7 +3,9 @@ import { useState } from "react";
 import styles from "./index.module.css";
 
 export default function Home() {
-  const [animalInput, setAnimalInput] = useState("");
+  const [dreamAnalysisDescriptionInput,setDreamAnalysisDescription] = useState("");
+  const [dreamFeelingInput, setDreamFeeling] = useState("");
+  const [walkingInfluenceInput, setWalkingInfluence] = useState("");
   const [result, setResult] = useState();
 
   async function onSubmit(event) {
@@ -14,7 +16,7 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ animal: animalInput }),
+        body: JSON.stringify({dreamAnalysisDescription:dreamAnalysisDescriptionInput,dreamFeeling:dreamFeelingInput,walkingInfluence:walkingInfluenceInput }),
       });
 
       const data = await response.json();
@@ -23,7 +25,10 @@ export default function Home() {
       }
 
       setResult(data.result);
-      setAnimalInput("");
+      console.log(data)
+      setDreamAnalysisDescription("");
+      setDreamFeeling("");
+      setWalkingInfluence("");
     } catch(error) {
       // Consider implementing your own error handling logic here
       console.error(error);
@@ -40,16 +45,30 @@ export default function Home() {
 
       <main className={styles.main}>
         <img src="/dog.png" className={styles.icon} />
-        <h3>Name my pet</h3>
+        <h3>Generate Your Dream NFT</h3>
         <form onSubmit={onSubmit}>
           <input
             type="text"
-            name="animal"
-            placeholder="Enter an animal"
-            value={animalInput}
-            onChange={(e) => setAnimalInput(e.target.value)}
+            name="dreamAnalysisDescription"
+            placeholder="Describe your dream to me"
+            value={dreamAnalysisDescriptionInput}
+            onChange={(e) => setDreamAnalysisDescription(e.target.value)}
           />
-          <input type="submit" value="Generate names" />
+          <input
+            type="text"
+            name="dreamFeeling"
+            placeholder="How did this dream make you feel"
+            value={dreamFeelingInput}
+            onChange={(e) => setDreamFeeling(e.target.value)}
+          />
+          <input
+            type="text"
+            name="walkingInfluence"
+            placeholder="What in your waking life do you think influenced this dream?"
+            value={walkingInfluenceInput}
+            onChange={(e) => setWalkingInfluence(e.target.value)}
+          />
+          <input type="submit" value="Generate Dream" />
         </form>
         <div className={styles.result}>{result}</div>
       </main>

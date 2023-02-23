@@ -15,11 +15,29 @@ export default async function (req, res) {
     return;
   }
 
-  const animal = req.body.animal || '';
-  if (animal.trim().length === 0) {
+  const dreamAnalysisDescription = req.body.dreamAnalysisDescription || '';
+  if (dreamAnalysisDescription.trim().length === 0) {
     res.status(400).json({
       error: {
-        message: "Please enter a valid animal",
+        message: "Please enter a valid dream description",
+      }
+    });
+    return;
+  }
+  const walkingInfluence = req.body.walkingInfluence || '';
+  if (walkingInfluence.trim().length === 0) {
+    res.status(400).json({
+      error: {
+        message: "Please enter a valid dream walking influence",
+      }
+    });
+    return;
+  }
+  const dreamFeeling = req.body.dreamFeeling || '';
+  if (dreamFeeling.trim().length === 0) {
+    res.status(400).json({
+      error: {
+        message: "Please enter a valid dream Feeling",
       }
     });
     return;
@@ -28,10 +46,11 @@ export default async function (req, res) {
   try {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: generatePrompt(animal),
+      prompt: generatePrompt(dreamAnalysisDescription,dreamFeeling,walkingInfluence),
       temperature: 0.6,
     });
     res.status(200).json({ result: completion.data.choices[0].text });
+    console.log(res)
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
@@ -48,15 +67,11 @@ export default async function (req, res) {
   }
 }
 
-function generatePrompt(animal) {
-  const capitalizedAnimal =
-    animal[0].toUpperCase() + animal.slice(1).toLowerCase();
-  return `Suggest three names for an animal that is a superhero.
-
-Animal: Cat
-Names: Captain Sharpclaw, Agent Fluffball, The Incredible Feline
-Animal: Dog
-Names: Ruff the Protector, Wonder Canine, Sir Barks-a-Lot
-Animal: ${capitalizedAnimal}
-Names:`;
+function generatePrompt(dreamAnalysisDescription,dreamFeeling,walkingInfluence) {
+  
+const dreamAnalysisprefix = "ChatGPT, analyze this dream for me with Freudian psychoanalysis and omit the first paragraph and any disclaimers that you are not a psychologist, I know you're just an ai chatbot:";
+const dreamFeelingPrefix = "My feelings of the dream:";
+const dreamWakingInfluencePrefix= "What may be influencing influencing this dream in my waking life:"
+const DreamAnalysisString= dreamAnalysisprefix + dreamAnalysisDescription + dreamFeelingPrefix + dreamFeeling + dreamWakingInfluencePrefix+ walkingInfluence
+  return DreamAnalysisString;
 }
